@@ -1,0 +1,70 @@
+---
+title: "Assignment1"
+output: html_document
+---
+
+
+```{r message=FALSE}
+##Loading Libraries
+library(GenomicRanges)
+library(rtracklayer)
+library(RColorBrewer)
+```
+
+```{r}
+#Read bed files
+k27ac <- import.bedGraph(con="/Users/JJ/Documents/Rotations/K27Ac_D7_Th1-W200-G200-E200-island.bedgraph", asRangedData=FALSE)
+dat3 <- import.bed(con="/Users/JJ/Documents/Rotations/3merge.bed", asRangedData=FALSE)
+overlap <- import.bed(con="/Users/JJ/Documents/Rotations/5merge.bed", asRangedData=FALSE)
+k4m3 <- import.bedGraph(con="/Users/JJ/Documents/Rotations/K4m3_Th1_72h-W200-G200-E200-island.bedgraph", asRangedData=FALSE)
+dat4 <- import.bed(con="/Users/JJ/Documents/Rotations/4merge.bed", asRangedData=FALSE)
+overlap2 <- import.bed(con="/Users/JJ/Documents/Rotations/6merge.bed", asRangedData=FALSE)
+```
+
+```{r}
+#Calculate Percentages
+total <- sum(width(k27ac))
+part <- sum(width(dat3))
+part3 <- sum(width(overlap))
+
+total2 <- sum(width(k4m3))
+part2 <- sum(width(dat4))
+
+part4 <- sum(width(overlap2))
+
+(ans3 <- part/total)
+(ans4 <- part2/total2)
+(ans5 <- part3/total2)
+(ans6 <- part4/total)
+```
+
+```{r echo=FALSE}
+##Loading Libraries
+#Function to put graphs in 2x2 Grid
+mypar2 <- function(a=1,b=1,brewer.n=8,brewer.name="Dark2",cex.lab=1,cex.main=1.2,cex.axis=1,mar=c(2.5,2.5,1.6,1.1),mgp=c(1.5,.5,0),...){
+  require(RColorBrewer)
+  par(mar=mar,mgp=mgp,cex.lab=cex.lab,cex.main=cex.main,cex.axis=cex.axis)
+  par(mfrow=c(a,b),...)
+  palette(brewer.pal(brewer.n,brewer.name))
+}
+```
+
+```{r}
+##Creating Graphs
+mypar2(2,2)
+slices <- c(part, total) ##Pie chart 1
+lbls <- c("TSS", "Total")
+pie(slices, labels = lbls, main="A H3K4me3 Marks within 5kbp of TSS")
+slices <- c(part2, total2) ##Pie chart 2
+lbls <- c("TSS", "Total")
+pie(slices, labels = lbls, main="B H3K27ac Marks within 5kbp of TSS")
+slices <- c(part2, total2) ##Pie chart 3
+lbls <- c("Overlap", "Total")
+pie(slices, labels = lbls, main="C H3K4me3 Overlapping H3K27ac")
+slices <- c(part3, total) ##Pie chart 4
+lbls <- c("Overlap", "Total")
+pie(slices, labels = lbls, main="D H3K27ac Overlapping H3K4me3")
+```
+
+Figure 1. A shows the percentage of H3K4Me3 marks within 5 kbp on either side of the transcription start sites of every gene over the entire H3K4Me3 coverage of the genome. B shows the percentage of H3K27ac marks within 5 kbp on either side of the transcription start sites of every gene over the entire H3K27ac coverage of the genome. C shows the percentage of H3K4me3 coverage that overlaps the coverage of H3K27ac and D shows the percentage of H3K27ac coverage over the entire coverage of H3K4me3.
+
