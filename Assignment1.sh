@@ -4,9 +4,11 @@ ref=mm9_RefSeq.bed
 k27ac=K27Ac_D7_Th1-W200-G200-E200-island.bedgraph
 k4me3=K4m3_Th1_72h-W200-G200-E200-island.bedgraph
 #---------------------finding overlapping genes---------------------------
-bedtools intersect -a ${ref} -b ${k27ac} -u -bed | cut -f4 -d$'\t' | uniq -u > 1.txt 
+bedtools intersect -a ${ref} -b ${k27ac} -u -bed > 1.bed 
+cut -f4 -d$'\t' 1.bed | uniq -u > 1.txt 
 wc -l 1.txt
-bedtools intersect -a ${ref} -b ${k4me3} -u -bed | cut -f4 -d$'\t' | uniq -u > 2.txt 
+bedtools intersect -a ${ref} -b ${k4me3} -u -bed > 2.bed
+cut -f4 -d$'\t' 2.bed | uniq -u > 2.txt 
 wc -l 2.txt
 
 
@@ -21,9 +23,21 @@ bedtools slop -i tss.bed -g mm9.genome -b 5000 > tss5000.bed
 bedtools intersect -a tss5000.bed -b ${k27ac} -bed > 3.bed
 bedtools intersect -a tss5000.bed -b ${k4me3} -bed > 4.bed
 
+#--------------------listing genes with TSS that have overlapping histone marks-----
+cut -f4 -d$'\t' 3.bed | uniq -u > 3gene.txt 
+wc -l 3gene.txt
+cut -f4 -d$'\t' 4.bed | uniq -u > 4gene.txt 
+wc -l 4gene.txt
+
 #---------------------finding overlapping marks------------------------------
-bedtools intersect -a ${k27ac} -b ${k4me3} -bed > 5.bed
-bedtools intersect -a ${k4me3} -b ${k27ac} -bed > 6.bed
+bedtools intersect -a 1.bed -b ${k4me3} -bed > 5.bed
+bedtools intersect -a 2.bed -b ${k27ac} -bed > 6.bed
+
+#--------------------listing genes with that have overlapping histone marks-----
+cut -f4 -d$'\t' 5.bed | uniq -u > 5gene.txt 
+wc -l 5gene.txt
+cut -f4 -d$'\t' 6.bed | uniq -u > 6gene.txt 
+wc -l 6gene.txt
 
 #---------------------sorting and merging-------------------------------
 #All overlapping peaks are merged 

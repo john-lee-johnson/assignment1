@@ -4,12 +4,12 @@ library(rtracklayer)
 library(RColorBrewer)
 
 #Read bed files
-k27ac <- import.bedGraph(con="/Users/JJ/Documents/Rotations/K27Ac_D7_Th1-W200-G200-E200-island.bedgraph", asRangedData=FALSE)
-dat3 <- import.bed(con="/Users/JJ/Documents/Rotations/3merge.bed", asRangedData=FALSE)
-overlap <- import.bed(con="/Users/JJ/Documents/Rotations/5merge.bed", asRangedData=FALSE)
-k4m3 <- import.bedGraph(con="/Users/JJ/Documents/Rotations/K4m3_Th1_72h-W200-G200-E200-island.bedgraph", asRangedData=FALSE)
-dat4 <- import.bed(con="/Users/JJ/Documents/Rotations/4merge.bed", asRangedData=FALSE)
-overlap2 <- import.bed(con="/Users/JJ/Documents/Rotations/6merge.bed", asRangedData=FALSE)
+k27ac <- import.bedGraph(con="K27Ac_D7_Th1-W200-G200-E200-island.bedgraph", asRangedData=FALSE)
+dat3 <- import.bed(con="3merge.bed", asRangedData=FALSE)
+overlap <- import.bed(con="5merge.bed", asRangedData=FALSE)
+k4m3 <- import.bedGraph(con="K4m3_Th1_72h-W200-G200-E200-island.bedgraph", asRangedData=FALSE)
+dat4 <- import.bed(con="4merge.bed", asRangedData=FALSE)
+overlap2 <- import.bed(con="6merge.bed", asRangedData=FALSE)
 
 #Calculate Percentages
 total <- sum(width(k27ac))
