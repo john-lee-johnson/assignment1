@@ -58,10 +58,10 @@ pie(slices, labels = lbls, main="A H3K4me3 Marks within 5kbp of TSS")
 slices <- c(part2, total2) ##Pie chart 2
 lbls <- c("TSS", "Total")
 pie(slices, labels = lbls, main="B H3K27ac Marks within 5kbp of TSS")
-slices <- c(part2, total2) ##Pie chart 3
+slices <- c(part3, total2) ##Pie chart 3
 lbls <- c("Overlap", "Total")
 pie(slices, labels = lbls, main="C H3K4me3 Overlapping H3K27ac")
-slices <- c(part3, total) ##Pie chart 4
+slices <- c(part4, total) ##Pie chart 4
 lbls <- c("Overlap", "Total")
 pie(slices, labels = lbls, main="D H3K27ac Overlapping H3K4me3")
 ```

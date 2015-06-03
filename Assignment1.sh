@@ -4,13 +4,16 @@ ref=mm9_RefSeq.bed
 k27ac=K27Ac_D7_Th1-W200-G200-E200-island.bedgraph
 k4me3=K4m3_Th1_72h-W200-G200-E200-island.bedgraph
 #---------------------finding overlapping genes---------------------------
-bedtools intersect -a ${ref} -b ${k27ac} -u -bed > 1.bed 
-cut -f4 -d$'\t' 1.bed | uniq -u > 1.txt 
-wc -l 1.txt
-bedtools intersect -a ${ref} -b ${k4me3} -u -bed > 2.bed
-cut -f4 -d$'\t' 2.bed | uniq -u > 2.txt 
-wc -l 2.txt
+bedtools intersect -a ${ref} -b ${k27ac} -u -bed | awk '!seen[$4] {print}
+     {++seen[$4]}' > 1.bed 
+wc -l 1.bed
 
+sort 1.bed > 1sort.bed
+
+bedtools intersect -a ${ref} -b ${k4me3} -u -bed | awk '!seen[$4] {print}
+     {++seen[$4]}' > 2.bed
+wc -l 2.bed
+sort 2.bed > 2sort.bed
 
 #---------------------generating TSS file-------------------------------
 #TSS are found by taking the first nucleotide of the gene (start for + strand, and last for - strand)
@@ -24,20 +27,17 @@ bedtools intersect -a tss5000.bed -b ${k27ac} -bed > 3.bed
 bedtools intersect -a tss5000.bed -b ${k4me3} -bed > 4.bed
 
 #--------------------listing genes with TSS that have overlapping histone marks-----
-cut -f4 -d$'\t' 3.bed | uniq -u > 3gene.txt 
-wc -l 3gene.txt
-cut -f4 -d$'\t' 4.bed | uniq -u > 4gene.txt 
-wc -l 4gene.txt
+bedtools intersect -a tss5000.bed -b ${k27ac} -wa -bed | awk '!seen[$4] {print}
+     {++seen[$4]}' > 3gene.bed
+wc -l 3gene.bed
+bedtools intersect -a tss5000.bed -b ${k4me3} -wa -bed | awk '!seen[$4] {print}
+     {++seen[$4]}'> 4gene.bed
 
 #---------------------finding overlapping marks------------------------------
-bedtools intersect -a 1.bed -b ${k4me3} -bed > 5.bed
-bedtools intersect -a 2.bed -b ${k27ac} -bed > 6.bed
-
-#--------------------listing genes with that have overlapping histone marks-----
-cut -f4 -d$'\t' 5.bed | uniq -u > 5gene.txt 
-wc -l 5gene.txt
-cut -f4 -d$'\t' 6.bed | uniq -u > 6gene.txt 
-wc -l 6gene.txt
+bedtools intersect -a 1.bed -b ${k4me3} -bed | awk '!seen[$4] {print}
+     {++seen[$4]}'> 5gene.bed
+bedtools intersect -a 2.bed -b ${k27ac} -bed | awk '!seen[$4] {print}
+     {++seen[$4]}'> 6gene.bed
 
 #---------------------sorting and merging-------------------------------
 #All overlapping peaks are merged 
