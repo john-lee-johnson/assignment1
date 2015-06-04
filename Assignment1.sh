@@ -29,8 +29,10 @@ bedtools intersect -a tss5000.bed -b ${k4me3} -bed > 4.bed
 #--------------------listing genes with TSS that have overlapping histone marks-----
 bedtools intersect -a tss5000.bed -b ${k27ac} -wa -bed | awk '!seen[$4] {print}
      {++seen[$4]}' > 3gene.bed
+wc -l 3gene.bed
 bedtools intersect -a tss5000.bed -b ${k4me3} -wa -bed | awk '!seen[$4] {print}
      {++seen[$4]}'> 4gene.bed
+wc -l 4gene.bed
 
 #---------------------finding overlapping histone marks------------------------
 bedtools intersect -a 1.bed -b ${k4me3} -bed > 5.bed
@@ -39,8 +41,10 @@ bedtools intersect -a 2.bed -b ${k27ac} -bed > 6.bed
 #---------------------listing overlapping marks------------------------------
 bedtools intersect -a 1.bed -b ${k4me3} -wa -bed | bedtools bed12tobed6 -i | awk '!seen[$4] {print}
      {++seen[$4]}'> 5gene.bed
+wc -l 5gene.bed
 bedtools intersect -a 2.bed -b ${k27ac} -wa -bed | bedtools bed12tobed6 -i | awk '!seen[$4] {print}
      {++seen[$4]}'> 6gene.bed
+wc -l 6gene.bed
 
 #---------------------sorting and merging-------------------------------
 #All overlapping peaks are merged 
